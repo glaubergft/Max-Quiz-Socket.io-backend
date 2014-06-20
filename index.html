@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<script src='//code.jquery.com/jquery-1.7.2.min.js'></script>
+	<script src='//192.168.1.5:3000/socket.io/socket.io.js'></script>
+</head>
+<body style="margin:0px;height:100%;">
+    <!--
+    <br />
+    <button onclick="load2();">Load</button>
+    <button onclick="play2();">Play</button>
+    <button onclick="stop();">Stop</button>
+    <button onclick="reset();">Reset</button>
+    <br />
+    -->
+	<button onclick="btnConectarClick();">Conectar</button>
+	<button id="btnProcQuestoes" onclick="btnProcQuestoesClick();" style="display:none">procQuestoes</button>
+	<button id="btnSincronizarTela" onclick="btnSincronizarTelaClick();" style="display:none">SincronizarTela</button>
+	<button id="btnAcertarQuestao" onclick="btnAcertarQuestaoClick();" style="display:none">AcertarQuestao</button>
+	<button id="btnErrarQuestao" onclick="btnErrarQuestaoClick();" style="display:none">ErrarQuestao</button>
+	<button id="btnCarta" onclick="btnCartaClick();" style="display:none">Carta</button>
+	<button id="btnDesconectare" onclick="btnbtnDesconectareClick();" style="display:none">Desconectare</button>
+	<!--
+	
+	-->
+	
+	<textarea id="txtLog" style="display:none"></textarea>
+	<a id="log" href="uniwebview://startok" onclick="btnClick();" style="color:black;width:100%;height:100%;background-color:blue;filter:alpha(opacity=50);opacity:0.5; position: absolute; color: #000000;" >
+    </a>
+   <iframe id="cmd" style="display:none"></iframe>
+
+    <script type="text/javascript">
+        var primeiroClick = true;
+        var urlCanal = new Object(); // or just {}
+        var audioArray = new Object();
+        var audioCanal = 0;
+        var log = document.getElementById('txtLog'); //document.getElementById('log');
+
+		//lg('teste');
+        //setTimeout("document.getElementById('cmd1').src = 'uniwebview://startok';", 3000);
+
+        function btnClick()
+        {
+            if (primeiroClick)
+            {
+                primeiroClick = false;
+
+                reset();
+                
+                //lg('tentando fechar...');
+                //document.getElementById('cmd1').src = 'uniwebview://startok';
+                
+                
+                /*
+                document.getElementById('audio1').play();
+                document.getElementById('audio2').play();
+                document.getElementById('audio3').play();
+                document.getElementById('audio4').play();
+                document.getElementById('audio5').play();
+                document.getElementById('audio6').play();
+                document.getElementById('audio7').play();
+                document.getElementById('audio8').play();
+                document.getElementById('audio9').play();
+                */
+
+                //setTimeout("document.getElementById('audio1').pause();document.getElementById('audio2').pause();document.getElementById('audio3').pause();", 50);
+            }
+            //document.getElementById('txt').value += "TESTE1;";
+            //document.getElementById('audio1').src = 'http://a1168.phobos.apple.com/us/r1000/060/Music/20/d4/92/mzm.atjgatdu.aac.p.m4a';
+            
+            //document.getElementById('txt').value += "TESTE2;";
+        }
+
+        function reset()
+        {
+            urlCanal = new Object();
+            audioCanal = 0;
+            iplay2 = 0;
+            iload2 = 0;
+            audioArray = null;
+            audioArray = new Object();
+            audioArray[audioCanal] = document.createElement('audio');
+            audioArray[audioCanal].src = 'load.mp3';
+        }
+
+        var iload2 = 0;
+        var urls = 'http://a868.phobos.apple.com/us/r1000/076/Music/35/71/4f/mzm.isfolipv.aac.p.m4a,http://a1007.phobos.apple.com/us/r1000/087/Music/f1/61/6f/mzm.bewekhox.aac.p.m4a,http://a1463.phobos.apple.com/us/r1000/082/Music/a1/1f/0c/mzm.mixmtubb.aac.p.m4a,http://a1879.phobos.apple.com/us/r1000/069/Music/c7/29/74/mzm.yjftnbnp.aac.p.m4a,http://a695.phobos.apple.com/us/r1000/119/Music/9a/75/44/mzm.tmyrvzyb.aac.p.m4a,http://a1488.phobos.apple.com/us/r1000/064/Music/4e/ff/11/mzm.tsdjgmxw.aac.p.m4a,http://a1884.phobos.apple.com/us/r1000/095/Music/7f/b0/e7/mzm.kmbqwuyd.aac.p.m4a,http://a398.phobos.apple.com/us/r1000/085/Music/41/58/2c/mzm.creivykx.aac.p.m4a,http://a1545.phobos.apple.com/us/r1000/119/Music/ef/5a/45/mzm.rdboaijp.aac.p.m4a,http://a239.phobos.apple.com/us/r1000/092/Music/1c/14/74/mzm.aaxtofkq.aac.p.m4a,http://a590.phobos.apple.com/us/r1000/115/Music/66/db/73/mzm.oddyufor.aac.p.m4a'.split(',');
+        function load2()
+        {
+            if (iload2 == urls.length)
+            {
+                iload2 = 0;
+            }
+            load(urls[iload2]);
+            iload2++;
+        }
+
+        function load(url)
+        {
+            audioCanal++;
+            /*
+            if (audioCanal == 4)
+            {
+                audioCanal = 1;
+            }
+            */
+            audioArray[audioCanal] = document.createElement('audio');
+            audioArray[audioCanal].src = url;
+            audioArray[audioCanal].volume = 0;
+            audioArray[audioCanal].play();
+            setTimeout("audioArray[" + audioCanal + "].pause();", 1);
+
+            urlCanal[url] = audioCanal;
+            //document.getElementById('audio' + audioCanal).volume = 0;
+
+            //document.getElementById('audio' + audioCanal).src = url;
+
+            //document.getElementById('audio' + audioCanal).play();
+            //setTimeout("document.getElementById('audio" + audioCanal + "').pause();", 1);
+            lg('Load(canal):' + audioCanal);
+            lg('Load:' + url);
+        }
+
+        
+        var ultimoCanalUtilizado=0;
+        function play(url)
+        {
+            var canal = urlCanal[url];
+            ultimoCanalUtilizado = canal;
+
+            
+
+            //document.getElementById('audio' + canal).volume = 0;
+
+            //document.getElementById('audio' + canal).play();
+            audioArray[canal].volume = 0;
+            audioArray[canal].play();
+
+            
+            for (var i = 1; i <= 100; i++)
+            {
+                setTimeout("document.getElementById('audio"+canal+"').volume = " + (i / 100), i * 10);
+                setTimeout("audioArray["+canal+"].volume = " + (i / 100), i * 10);
+            }
+            
+            lg('Play(canal):' + canal);
+            lg('Play:' + url);
+        }
+
+        var iplay2 = 0;
+        function play2()
+        {
+            if (iplay2 == urls.length)
+            {
+                iplay2 = 0;
+            }
+            play(urls[iplay2]);
+            iplay2++;
+        }
+        
+        function stop(imediato)
+        {
+            if (ultimoCanalUtilizado == 0)
+            {
+                return;
+            }
+
+
+           // audioArray[ultimoCanalUtilizado].pause();
+
+            if (audioArray[ultimoCanalUtilizado].paused)
+            {
+                return;
+            }
+
+            if (imediato)
+            {
+                audioArray[ultimoCanalUtilizado].pause();
+                audioArray[ultimoCanalUtilizado] = null;
+                delete audioArray[ultimoCanalUtilizado];
+            }
+
+            for (var i = 100; i >= 1; i--)
+            {
+                setTimeout("audioArray["+ultimoCanalUtilizado+"].volume = " + (i / 100), 1000 - i * 10);
+            }
+            setTimeout("audioArray[" + ultimoCanalUtilizado + "].pause();", 1090);
+            //setTimeout("audioArray[" + ultimoCanalUtilizado + "]=null", 1100);
+            setTimeout("audioArray[" + ultimoCanalUtilizado + "].src='';audioArray[" + ultimoCanalUtilizado + "].load();", 1100);
+            
+
+            //return;
+            /*
+            if (document.getElementById('audio'+ultimoCanalUtilizado).paused)
+            {
+                return;
+            }
+
+            for (var i = 100; i >= 1; i--)
+            {
+                setTimeout("document.getElementById('audio"+ultimoCanalUtilizado+"').volume = " + (i / 100), 1000 - i * 10);
+            }
+            setTimeout("document.getElementById('audio" + ultimoCanalUtilizado + "').pause();", 1100);
+            */
+            lg('Stop(canal):' + ultimoCanalUtilizado);
+        }
+
+        function teste()
+        {
+            document.getElementById('audio1').src = 'http://a1168.phobos.apple.com/us/r1000/060/Music/20/d4/92/mzm.atjgatdu.aac.p.m4a';
+            document.getElementById('audio1').play();
+        }
+
+        function lg(txt)
+        {
+            //log.innerText = txt +'\n'+ log.innerText;
+			log.value = txt +'\n'+ log.value;
+        }
+        //setTimeout('teste();',5000);
+        
+        function loadjsfile(filename)
+        {
+            var fileref = document.createElement('script');
+            fileref.setAttribute("type", "text/javascript");
+            fileref.setAttribute("charset", "UTF-8");
+            fileref.setAttribute("src", filename);
+            if (typeof fileref != "undefined")
+            {
+                document.getElementsByTagName("head")[0].appendChild(fileref);
+            }
+        }
+		
+		
+		
+		function btnConectarClick()
+		{
+			document.getElementById('btnProcQuestoes').style.display='';
+			document.getElementById('btnSincronizarTela').style.display='';
+			document.getElementById('btnAcertarQuestao').style.display='';
+			document.getElementById('btnErrarQuestao').style.display='';
+			document.getElementById('btnCarta').style.display='';
+			document.getElementById('btnDesconectare').style.display='';
+			//conectarCliente('6_1','Y29uZmlndXJhY2FvUGVyc29uYWdlbT1jR1ZzWlQxd1pXeGxPM0JsYkdVNlkyOXlMekl4Tnl3eE5ETXNNVEU0SUdOdmNuQnZMMk5oYldsellUMHdNREF6TzJOaGJXbHpZVHBqYjNJdk1qWXNOVGtzTVRJNElHTnZjbkJ2TDJOaGJXbHpZVEk5TURBd01EdGpZVzFwYzJFeU9tTnZjaTgwTVN3ME1TdzBNU0JqYjNKd2J5OWpZV3hqWVQwd01EQXhPM0F4WHpFNlkyOXlMekkyTERVNUxERXlPQ0JqYjNKd2J5OWpZV3hqWVdSdlBUQXdNREU3Y0RGZk1UcGpiM0l2TkRFc05ERXNOREY4Y0RGZk1qcGpiM0l2TVRjNUxERTNPU3d4TnpsOGNERmZNenBqYjNJdk1qTTRMREl6T0N3eU16aDhjREZmTkRwamIzSXZNakU1TERJeE9Td3lNVGtnWTJGaVpXTmhMMk5oWW1Wc2J6MHdNREF4TzFCc1lXNWxPbU52Y2k4Mk5Dd3pOaXd6TlNCallXSmxZMkV2YjJ4b2J6MHdNREF6TzFCc1lXNWxPbU52Y2k4d0xEQXNNQ0JqWVdKbFkyRXZjMjlpY21GdVkyVnNhR0U5TURBd01UdFFiR0Z1WlRwamIzSXZNQ3d3TERBZ1kyRmlaV05oTDJKdlkyRTlNREF3TVR0UWJHRnVaVHBqYjNJdk1qVTFMREV6T1N3eE5UQWdZMkZpWldOaEwyNWhjbWw2UFRBd01ESTdZMkZpWldOaE9tTnZjaTh3TERBc01DQmpZV0psWTJFdlltRnlZbUU5TURBd016dFFiR0Z1WlRwamIzSXZOalFzTXpZc016VSE7dXN1YXJpb09yaWdlbUlkPTE7bml2ZWw9Nzt1c3VhcmlvSWQ9MTY7bm9tZT1HbGF1YmVyIFRvcnJlczt1c2VyTmFtZT1nbGF1YmVyZ2Z0O3JlZGVTb2NpYWxJZD0xMTkxNzc1MTcwO2lkaW9tYT1Qb3J0dWd1ZXNl');
+			conectarCliente(categoriaFase(),'Y29uZmlndXJhY2FvUGVyc29uYWdlbT1jR1ZzWlQxd1pXeGxPM0JsYkdVNlkyOXlMekl4Tnl3eE5ETXNNVEU0SUdOdmNuQnZMMk5oYldsellUMHdNREF6TzJOaGJXbHpZVHBqYjNJdk1qWXNOVGtzTVRJNElHTnZjbkJ2TDJOaGJXbHpZVEk5TURBd01EdGpZVzFwYzJFeU9tTnZjaTgwTVN3ME1TdzBNU0JqYjNKd2J5OWpZV3hqWVQwd01EQXhPM0F4WHpFNlkyOXlMekkyTERVNUxERXlPQ0JqYjNKd2J5OWpZV3hqWVdSdlBUQXdNREU3Y0RGZk1UcGpiM0l2TkRFc05ERXNOREY4Y0RGZk1qcGpiM0l2TVRjNUxERTNPU3d4TnpsOGNERmZNenBqYjNJdk1qTTRMREl6T0N3eU16aDhjREZmTkRwamIzSXZNakU1TERJeE9Td3lNVGtnWTJGaVpXTmhMMk5oWW1Wc2J6MHdNREF4TzFCc1lXNWxPbU52Y2k4Mk5Dd3pOaXd6TlNCallXSmxZMkV2YjJ4b2J6MHdNREF6TzFCc1lXNWxPbU52Y2k4d0xEQXNNQ0JqWVdKbFkyRXZjMjlpY21GdVkyVnNhR0U5TURBd01UdFFiR0Z1WlRwamIzSXZNQ3d3TERBZ1kyRmlaV05oTDJKdlkyRTlNREF3TVR0UWJHRnVaVHBqYjNJdk1qVTFMREV6T1N3eE5UQWdZMkZpWldOaEwyNWhjbWw2UFRBd01ESTdZMkZpWldOaE9tTnZjaTh3TERBc01DQmpZV0psWTJFdlltRnlZbUU5TURBd016dFFiR0Z1WlRwamIzSXZOalFzTXpZc016VSE7dXN1YXJpb09yaWdlbUlkPTE7bml2ZWw9MTI7dXN1YXJpb0lkPTIxO25vbWU9R2xhdWJlciBUb3JyZXM7dXNlck5hbWU9Z2xhdWJlcmdmdDtyZWRlU29jaWFsSWQ9MTE5MTc3NTE3MDtpZGlvbWE9UG9ydHVndWVzZQ!!');
+		}
+		
+		function categoriaFase()
+		{
+			var retorno=getParameterByName('fase');
+			if (retorno=='' || retorno==null)
+			{
+				retorno='6_1';
+			}
+			return retorno;
+		}
+		
+		function getParameterByName(name) {
+			name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+			var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+				results = regex.exec(location.search);
+			return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+		}
+		
+		function btnProcQuestoesClick()
+		{
+			enviarAcao('jogador2ConfigurouQuestoesEquivalentes','');
+		}
+		
+		function btnSincronizarTelaClick()
+		{
+			enviarAcao('comunicarFlagTelaSincronizada','');
+		}
+		
+		function btnAcertarQuestaoClick()
+		{
+			enviarAcao('adversarioOnlineTentativa','1|25');
+		}
+		
+		function btnErrarQuestaoClick()
+		{
+			enviarAcao('adversarioOnlineTentativa','0|15');
+		}
+		
+		function btnCartaClick()
+		{
+			enviarAcao('adversarioOnlineCarta',Math.floor((Math.random() * 3) + 1));
+		}
+		
+		function btnbtnDesconectareClick()
+		{
+			desconectarCliente();
+			document.getElementById('btnProcQuestoes').style.display='none';
+			document.getElementById('btnSincronizarTela').style.display='none';
+			document.getElementById('btnAcertarQuestao').style.display='none';
+			document.getElementById('btnErrarQuestao').style.display='none';
+			document.getElementById('btnCarta').style.display='none';
+			document.getElementById('btnDesconectare').style.display='none';
+		}
+		
+		
+		var socket=null;
+		//conectarCliente('6_1', 'usuarioDados');
+		function conectarCliente(categoriaFase, dadosUsuario)
+		{
+			lg('connect!');
+			if (socket==null)
+			{
+				socket = io.connect('//192.168.1.5:3000', {query:'customData='+categoriaFase+'|'+dadosUsuario});
+			}
+			else
+			{
+				socket.socket.options.query = 'customData='+categoriaFase+'|'+dadosUsuario;
+				socket.socket.reconnect();
+			}
+			
+			socket.on('jogadorEncontrado', function(data)
+			{
+				//$('#messages').append('<li>' + socket.message + '</li>');
+				document.getElementById('cmd').src = 'uniwebview://jogadorEncontrado?jogadorNumero='+data.jogadorNumero+'&informacoesUsuario='+data.informacoesUsuario;
+			});
+			
+			socket.on('acaoAdversario', function(data)
+			{
+				//$('#messages').append('<li>' + socket.message + '</li>');
+				document.getElementById('cmd').src = 'uniwebview://acaoAdversario?acao='+data.acao+'&parametro='+data.parametro;
+			});
+
+			/*
+			socket.on('welcome', function(data) {
+				$('#messages').append('<li>' + data.message + '</li>');
+
+				socket.emit('i am client', {data: 'foo!'});
+			});
+			socket.on('time', function(data) {
+				console.log(data);
+				$('#messages').append('<li>' + data.time + '</li>');
+			});
+			*/
+			socket.on('error', function() { lg(arguments) });
+			socket.on('message', function() { lg(arguments) });
+			
+			socket.on('disconnect', function () {
+				lg('DISCONNESSO!!! ');
+			});
+		}
+		
+		function sair()
+		{
+			enviarAcao('sair', '');
+			socket.disconnect();
+		}
+		
+		function desconectarCliente()
+		{
+			lg('desconectar...');
+			socket.disconnect();
+		}
+		
+		function enviarAcao(acao, parametro)
+		{
+			socket.emit('acao', { acao:acao, parametro:parametro });
+		}
+    </script>
+</body>
+</html>
